@@ -2,14 +2,11 @@
 // http://localhost:3000/isolated/exercise/04.js
 
 import * as React from 'react'
-// 🐨 import the useVirtual hook from react-virtual
-// import {useVirtual} from 'react-virtual'
+import {useVirtual} from 'react-virtual'
 import {useCombobox} from '../use-combobox'
 import {getItems} from '../workerized-filter-cities'
 import {useAsync, useForceRerender} from '../utils'
-import {useVirtual} from 'react-virtual'
 
-// 💰 I made this for you, you'll need it later:
 const getVirtualRowStyles = ({size, start}) => ({
   position: 'absolute',
   top: 0,
@@ -32,14 +29,6 @@ function Menu({
   return (
     <ul {...getMenuProps({ref: listRef})}>
       <li style={{height: totalHeight}} />
-      {/* instead of mapping the "items" we're going to map over the virtualRows */}
-      {/* 🐨 swap `items` with `virtualRows` */}
-      {/*
-        💰 a virtual row is an object with the following properties:
-        - index: you can use this to get the `item` via `items[index]`
-        - size: set the "height" style to this value
-        - start: this is how many pixels from the scrollTop this item should be
-      */}
       {virtualRows.map(({index, size, start}) => {
         const item = items[index]
         return (
