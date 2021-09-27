@@ -1,10 +1,10 @@
-// React.memo for reducing unnecessary re-renders
-// http://localhost:3000/isolated/exercise/03.js
+// useMemo for expensive calculations
+// http://localhost:3000/isolated/exercise/02.js
 
 import * as React from 'react'
 import {useCombobox} from '../use-combobox'
 import {getItems} from '../workerized-filter-cities'
-import {useAsync, useForceRerender} from '../utils'
+import {useForceRerender, useAsync} from '../utils'
 
 function Menu({
   items,
@@ -31,8 +31,6 @@ function Menu({
   )
 }
 
-Menu = React.memo(Menu)
-
 function ListItem({
   getItemProps,
   item,
@@ -58,27 +56,16 @@ function ListItem({
   )
 }
 
-ListItem = React.memo(ListItem, (prevProps, nextProps) => {
-  if (prevProps.getItemProps !== nextProps.getItemProps) return false
-  if (prevProps.item !== nextProps.item) return false
-  if (prevProps.index !== nextProps.index) return false
-  if (prevProps.selectedItem !== nextProps.selectedItem) return false
-  if (prevProps.highlightedIndex !== nextProps.highlightedIndex) {
-    const wasPrevHighlighted = prevProps.highlightedIndex === prevProps.index
-    const isNowHighlighted = nextProps.highlightedIndex === nextProps.index
-    return wasPrevHighlighted === isNowHighlighted
-  }
-  return true
-})
-
 function App() {
   const forceRerender = useForceRerender()
   const [inputValue, setInputValue] = React.useState('')
 
   const {data: allItems, run} = useAsync({data: [], status: 'pending'})
+
   React.useEffect(() => {
     run(getItems(inputValue))
   }, [inputValue, run])
+
   const items = allItems.slice(0, 100)
 
   const {
@@ -127,8 +114,3 @@ function App() {
 }
 
 export default App
-
-/*
-eslint
-  no-func-assign: 0,
-*/
